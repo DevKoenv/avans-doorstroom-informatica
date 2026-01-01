@@ -82,6 +82,7 @@ definePageMeta({
   layout: 'blank',
 })
 
+const { fetch: refreshSession } = useUserSession()
 const { t } = useI18n()
 const router = useRouter()
 const apiError = ref('')
@@ -106,13 +107,14 @@ const onSubmit = handleSubmit(async (values) => {
       method: 'POST',
       body: values,
     })
-
     if (res.success) {
-      await router.push('/app')
+      await refreshSession()
+
+      await navigateTo('/app')
     }
   } catch (err: any) {
     if (err.statusCode === 401 && err.data?.message?.includes('not verified')) {
-      await router.push(`/auth/verify-email?email=${encodeURIComponent(values.email)}`)
+      await navigateTo(`/auth/verify-email?email=${encodeURIComponent(values.email)}`)
     } else {
       const errorCode = err.data?.code
       apiError.value = errorCode

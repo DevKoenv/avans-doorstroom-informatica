@@ -102,13 +102,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ChevronsUpDown, LogOut, User, Settings, Moon, Sun, Languages, Check } from 'lucide-vue-next'
 
-defineProps<{
-  user: {
-    name: string
-    email: string
-    avatar?: string
-  }
-}>()
+const { user, clear } = useUserSession()
 
 const router = useRouter()
 const { isMobile } = useSidebar()
@@ -137,13 +131,14 @@ async function handleLogout() {
 
   try {
     await $fetch('/api/auth/logout', {
-      method: 'DELETE',
+      method: 'POST',
     })
 
-    await router.push('/auth/login')
+    await clear()
+
+    await navigateTo('/')
   } catch (error) {
     console.error('Logout failed:', error)
-    await router.push('/auth/login')
   } finally {
     isLoggingOut.value = false
   }

@@ -7,6 +7,7 @@
       '--normal-border': 'var(--border)',
       '--border-radius': 'var(--radius)',
     }"
+    :expand="true"
     v-bind="props"
   >
     <template #success-icon>
@@ -44,6 +45,7 @@ import {
 } from "lucide-vue-next";
 import { Toaster } from "vue-sonner";
 import { cn } from "@/utils/cn";
+import 'vue-sonner/style.css'
 
 const props = defineProps<ToasterProps>();
 </script>
