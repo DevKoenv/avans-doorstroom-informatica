@@ -47,26 +47,25 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-    // Send verification email
-    const { sendMail } = useNodeMailer();
     const config = useRuntimeConfig();
     const verificationUrl = `${config.public.appUrl}/auth/verify-email?token=${emailVerifyToken}`;
 
-    await sendMail({
-      to: email,
-      subject: "Verify your email address",
-      html: `
-        <h1>Email Verification</h1>
-        <p>Hello ${name || "there"},</p>
-        <p>Please click the link below to verify your email address:</p>
-        <p><a href="${verificationUrl}">Verify Email</a></p>
-        <p>If you did not create an account, please ignore this email.</p>
-      `,
-    });
+    // Send verification email
+    // await sendMail({
+    //   to: email,
+    //   subject: "Verify your email address",
+    //   html: `
+    //     <h1>Email Verification</h1>
+    //     <p>Hello ${name || "there"},</p>
+    //     <p>Please click the link below to verify your email address:</p>
+    //     <p><a href="${verificationUrl}">Verify Email</a></p>
+    //     <p>If you did not create an account, please ignore this email.</p>
+    //   `,
+    // });
 
     return {
       success: true,
-      message: "Registration successful. Please check your email to verify your account.",
+      url: verificationUrl,
     };
   } catch (error: any) {
     if (error instanceof z.ZodError) {

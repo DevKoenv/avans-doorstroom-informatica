@@ -38,21 +38,20 @@ export default defineEventHandler(async (event) => {
     },
   });
 
-  const { sendMail } = useNodeMailer();
   const resetLink = `${config.public.appUrl}/auth/reset-password?token=${token}`;
 
-  await sendMail({
-    to: email,
-    subject: "Reset your password",
-    html: `
-      <h1>Password Reset Request</h1>
-      <p>Hello ${user.name || "there"},</p>
-      <p>You recently requested to reset your password. Click the link below to set a new one:</p>
-      <p><a href="${resetLink}">Reset Password</a></p>
-      <p>If you didn't request this, you can ignore this email.</p>
-      <p>This link will expire in 1 hour.</p>
-    `,
-  });
+  // await sendMail({
+  //   to: email,
+  //   subject: "Reset your password",
+  //   html: `
+  //     <h1>Password Reset Request</h1>
+  //     <p>Hello ${user.name || "there"},</p>
+  //     <p>You recently requested to reset your password. Click the link below to set a new one:</p>
+  //     <p><a href="${resetLink}">Reset Password</a></p>
+  //     <p>If you didn't request this, you can ignore this email.</p>
+  //     <p>This link will expire in 1 hour.</p>
+  //   `,
+  // });
 
-  return { success: true };
+  return { success: true, url: resetLink };
 });
