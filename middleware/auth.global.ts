@@ -2,7 +2,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const { loggedIn } = useUserSession();
 
   // Public routes that don't require authentication
-  const publicRoutes = ["/auth/login", "/auth/register", "/auth/verify-email"];
+  const publicRoutes = ["/auth/login", "/auth/register", "/auth/verify-email", "/auth/forgot-password", "/auth/reset-password"];
 
   // Check if route requires authentication
   const requiresAuth = !publicRoutes.includes(to.path);
