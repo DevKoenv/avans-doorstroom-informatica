@@ -8,7 +8,7 @@
       <NavProjects :projects="data.projects" />
     </SidebarContent>
     <SidebarFooter>
-      <NavUser :user="data.user" />
+      <NavUser :user="user" />
     </SidebarFooter>
     <SidebarRail />
   </Sidebar>
@@ -33,6 +33,8 @@ import NavMain from "@/components/NavMain.vue"
 import NavProjects from "@/components/NavProjects.vue"
 import NavUser from "@/components/NavUser.vue"
 import TeamSwitcher from "@/components/TeamSwitcher.vue"
+
+const { user } = useUserSession();
 
 const props = withDefaults(defineProps<SidebarProps>(), {
   collapsible: "icon",

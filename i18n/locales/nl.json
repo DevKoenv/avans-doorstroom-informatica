@@ -1,4 +1,13 @@
 {
+  "nav": {
+    "profile": "Profiel",
+    "settings": "Instellingen",
+    "darkMode": "Donkere modus",
+    "lightMode": "Lichte modus",
+    "language": "Taal",
+    "logout": "Uitloggen",
+    "loggingOut": "Uitloggen..."
+  },
   "auth": {
     "signIn": "Inloggen",
     "signInTitle": "Log in op je account",

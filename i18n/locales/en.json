@@ -1,4 +1,13 @@
 {
+  "nav": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "language": "Language",
+    "logout": "Log out",
+    "loggingOut": "Logging out..."
+  },
   "auth": {
     "signIn": "Sign in",
     "signInTitle": "Sign in to your account",

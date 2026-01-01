@@ -3,9 +3,9 @@
     <div class="w-full max-w-sm">
       <Card>
         <CardHeader>
-          <CardTitle>{{ t('auth.verifyTitle') }}</CardTitle>
+          <CardTitle>{{ $t('auth.verifyTitle') }}</CardTitle>
           <CardDescription>
-            {{ t('auth.verifyDescription', { email: email || t('auth.email') }) }}
+            {{ $t('auth.verifyDescription', { email: email || $t('auth.email') }) }}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -20,25 +20,25 @@
           <form @submit.prevent="onSubmit" class="space-y-4">
             <VeeField name="code" v-slot="{ field, errors }" :validate-on-blur="true">
               <Field :data-invalid="!!errors.length">
-                <FieldLabel for="code">{{ t('auth.verificationCode') }}</FieldLabel>
+                <FieldLabel for="code">{{ $t('auth.verificationCode') }}</FieldLabel>
                 <Input
                   id="code"
                   type="text"
-                  :placeholder="t('auth.enterCode')"
+                  :placeholder="$t('auth.enterCode')"
                   autocomplete="one-time-code"
                   v-bind="field"
                   :aria-invalid="!!errors.length"
                   class="text-center text-lg tracking-wider"
                 />
-                <FieldDescription>{{ t('auth.enterCodeDescription') }}</FieldDescription>
+                <FieldDescription>{{ $t('auth.enterCodeDescription') }}</FieldDescription>
                 <FieldError v-if="errors.length" :errors="errors" />
               </Field>
             </VeeField>
 
             <div class="space-y-2">
               <Button type="submit" class="w-full" :disabled="loading || !!successMessage">
-                <span v-if="!loading">{{ t('auth.verifyEmail') }}</span>
-                <span v-else>{{ t('auth.verifying') }}</span>
+                <span v-if="!loading">{{ $t('auth.verifyEmail') }}</span>
+                <span v-else>{{ $t('auth.verifying') }}</span>
               </Button>
 
               <Button
@@ -48,14 +48,14 @@
                 :disabled="resendDisabled"
                 @click="resendCode"
               >
-                {{ resendDisabled ? t('auth.resendIn', { seconds: resendTimer }) : t('auth.resendCode') }}
+                {{ resendDisabled ? $t('auth.resendIn', { seconds: resendTimer }) : $t('auth.resendCode') }}
               </Button>
             </div>
           </form>
 
           <div class="mt-4 text-center text-sm">
             <NuxtLink to="/auth/login" class="underline-offset-4 hover:underline">
-              {{ t('auth.backToLogin') }}
+              {{ $t('auth.backToLogin') }}
             </NuxtLink>
           </div>
         </CardContent>

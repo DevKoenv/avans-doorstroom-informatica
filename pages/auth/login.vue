@@ -3,8 +3,8 @@
     <div class="w-full max-w-sm">
       <Card>
         <CardHeader>
-          <CardTitle>{{ t('auth.signInTitle') }}</CardTitle>
-          <CardDescription>{{ t('auth.enterEmail') }}</CardDescription>
+          <CardTitle>{{ $t('auth.signInTitle') }}</CardTitle>
+          <CardDescription>{{ $t('auth.enterEmail') }}</CardDescription>
         </CardHeader>
         <CardContent>
           <Alert v-if="apiError" variant="destructive" class="mb-4">
@@ -15,11 +15,11 @@
             <FieldGroup>
               <VeeField name="email" v-slot="{ field, errors }" :validate-on-blur="true">
                 <Field :data-invalid="!!errors.length">
-                  <FieldLabel for="email">{{ t('auth.email') }}</FieldLabel>
+                  <FieldLabel for="email">{{ $t('auth.email') }}</FieldLabel>
                   <Input
                     id="email"
                     type="email"
-                    :placeholder="t('auth.emailPlaceholder')"
+                    :placeholder="$t('auth.emailPlaceholder')"
                     autocomplete="email"
                     v-bind="field"
                     :aria-invalid="!!errors.length"
@@ -31,12 +31,12 @@
               <VeeField name="password" v-slot="{ field, errors }" :validate-on-blur="true">
                 <Field :data-invalid="!!errors.length">
                   <div class="flex items-center">
-                    <FieldLabel for="password">{{ t('auth.password') }}</FieldLabel>
+                    <FieldLabel for="password">{{ $t('auth.password') }}</FieldLabel>
                     <NuxtLink
                       to="/auth/forgot-password"
                       class="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                     >
-                      {{ t('auth.forgotPassword') }}
+                      {{ $t('auth.forgotPassword') }}
                     </NuxtLink>
                   </div>
                   <Input
@@ -51,17 +51,17 @@
 
               <Field>
                 <Button type="submit" class="w-full" :disabled="loading">
-                  <span v-if="!loading">{{ t('auth.login') }}</span>
-                  <span v-else>{{ t('auth.loggingIn') }}</span>
+                  <span v-if="!loading">{{ $t('auth.login') }}</span>
+                  <span v-else>{{ $t('auth.loggingIn') }}</span>
                 </Button>
               </Field>
             </FieldGroup>
           </form>
 
           <div class="mt-4 text-center text-sm">
-            <span class="text-muted-foreground">{{ t('auth.dontHaveAccount') }}</span>
+            <span class="text-muted-foreground">{{ $t('auth.dontHaveAccount') }}</span>
             <NuxtLink to="/auth/register" class="ml-1 underline-offset-4 hover:underline">
-              {{ t('auth.signUp') }}
+              {{ $t('auth.signUp') }}
             </NuxtLink>
           </div>
         </CardContent>
@@ -108,7 +108,7 @@ const onSubmit = handleSubmit(async (values) => {
     })
 
     if (res.success) {
-      await router.push('/')
+      await router.push('/app')
     }
   } catch (err: any) {
     if (err.statusCode === 401 && err.data?.message?.includes('not verified')) {

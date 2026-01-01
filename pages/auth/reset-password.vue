@@ -3,8 +3,8 @@
     <div class="w-full max-w-sm">
       <Card>
         <CardHeader>
-          <CardTitle>{{ t('auth.resetPasswordTitle') }}</CardTitle>
-          <CardDescription>{{ t('auth.resetPasswordDescription') }}</CardDescription>
+          <CardTitle>{{ $t('auth.resetPasswordTitle') }}</CardTitle>
+          <CardDescription>{{ $t('auth.resetPasswordDescription') }}</CardDescription>
         </CardHeader>
         <CardContent>
           <Alert v-if="apiError" variant="destructive" class="mb-4">
@@ -16,28 +16,28 @@
           </Alert>
 
           <Alert v-if="!token" variant="destructive" class="mb-4">
-            <AlertDescription>{{ t('auth.invalidResetToken') }}</AlertDescription>
+            <AlertDescription>{{ $t('auth.invalidResetToken') }}</AlertDescription>
           </Alert>
 
           <form v-if="token && !successMessage" @submit.prevent="onSubmit">
             <FieldGroup>
               <VeeField name="password" v-slot="{ field, errors }" :validate-on-blur="true">
                 <Field :data-invalid="!!errors.length">
-                  <FieldLabel for="password">{{ t('auth.newPassword') }}</FieldLabel>
+                  <FieldLabel for="password">{{ $t('auth.newPassword') }}</FieldLabel>
                   <Input
                     id="password"
                     type="password"
                     v-bind="field"
                     :aria-invalid="!!errors.length"
                   />
-                  <FieldDescription>{{ t('auth.passwordMinLength') }}</FieldDescription>
+                  <FieldDescription>{{ $t('auth.passwordMinLength') }}</FieldDescription>
                   <FieldError v-if="errors.length" :errors="errors" />
                 </Field>
               </VeeField>
 
               <VeeField name="confirmPassword" v-slot="{ field, errors }" :validate-on-blur="true">
                 <Field :data-invalid="!!errors.length">
-                  <FieldLabel for="confirmPassword">{{ t('auth.confirmNewPassword') }}</FieldLabel>
+                  <FieldLabel for="confirmPassword">{{ $t('auth.confirmNewPassword') }}</FieldLabel>
                   <Input
                     id="confirmPassword"
                     type="password"
@@ -50,8 +50,8 @@
 
               <Field>
                 <Button type="submit" class="w-full" :disabled="loading">
-                  <span v-if="!loading">{{ t('auth.resetPassword') }}</span>
-                  <span v-else>{{ t('auth.resetting') }}</span>
+                  <span v-if="!loading">{{ $t('auth.resetPassword') }}</span>
+                  <span v-else>{{ $t('auth.resetting') }}</span>
                 </Button>
               </Field>
             </FieldGroup>
@@ -59,7 +59,7 @@
 
           <div class="mt-4 text-center text-sm">
             <NuxtLink to="/auth/login" class="underline-offset-4 hover:underline">
-              {{ t('auth.backToLogin') }}
+              {{ $t('auth.backToLogin') }}
             </NuxtLink>
           </div>
         </CardContent>

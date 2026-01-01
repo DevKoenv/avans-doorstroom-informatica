@@ -3,8 +3,8 @@
     <div class="w-full max-w-sm">
       <Card v-if="!showVerification">
         <CardHeader>
-          <CardTitle>{{ t('auth.createAccount') }}</CardTitle>
-          <CardDescription>{{ t('auth.enterDetails') }}</CardDescription>
+          <CardTitle>{{ $t('auth.createAccount') }}</CardTitle>
+          <CardDescription>{{ $t('auth.enterDetails') }}</CardDescription>
         </CardHeader>
         <CardContent>
           <Alert v-if="apiError" variant="destructive" class="mb-4">
@@ -15,11 +15,11 @@
             <FieldGroup>
               <VeeField name="name" v-slot="{ field, errors }" :validate-on-blur="true">
                 <Field :data-invalid="!!errors.length">
-                  <FieldLabel for="name">{{ t('auth.name') }}</FieldLabel>
+                  <FieldLabel for="name">{{ $t('auth.name') }}</FieldLabel>
                   <Input
                     id="name"
                     type="text"
-                    :placeholder="t('auth.namePlaceholder')"
+                    :placeholder="$t('auth.namePlaceholder')"
                     autocomplete="name"
                     v-bind="field"
                     :aria-invalid="!!errors.length"
@@ -30,11 +30,11 @@
 
               <VeeField name="email" v-slot="{ field, errors }" :validate-on-blur="true">
                 <Field :data-invalid="!!errors.length">
-                  <FieldLabel for="email">{{ t('auth.email') }}</FieldLabel>
+                  <FieldLabel for="email">{{ $t('auth.email') }}</FieldLabel>
                   <Input
                     id="email"
                     type="email"
-                    :placeholder="t('auth.emailPlaceholder')"
+                    :placeholder="$t('auth.emailPlaceholder')"
                     autocomplete="email"
                     v-bind="field"
                     :aria-invalid="!!errors.length"
@@ -45,21 +45,21 @@
 
               <VeeField name="password" v-slot="{ field, errors }" :validate-on-blur="true">
                 <Field :data-invalid="!!errors.length">
-                  <FieldLabel for="password">{{ t('auth.password') }}</FieldLabel>
+                  <FieldLabel for="password">{{ $t('auth.password') }}</FieldLabel>
                   <Input
                     id="password"
                     type="password"
                     v-bind="field"
                     :aria-invalid="!!errors.length"
                   />
-                  <FieldDescription>{{ t('auth.passwordMinLength') }}</FieldDescription>
+                  <FieldDescription>{{ $t('auth.passwordMinLength') }}</FieldDescription>
                   <FieldError v-if="errors.length" :errors="errors" />
                 </Field>
               </VeeField>
 
               <VeeField name="confirmPassword" v-slot="{ field, errors }" :validate-on-blur="true">
                 <Field :data-invalid="!!errors.length">
-                  <FieldLabel for="confirmPassword">{{ t('auth.confirmPassword') }}</FieldLabel>
+                  <FieldLabel for="confirmPassword">{{ $t('auth.confirmPassword') }}</FieldLabel>
                   <Input
                     id="confirmPassword"
                     type="password"
@@ -72,17 +72,17 @@
 
               <Field>
                 <Button type="submit" class="w-full" :disabled="loading">
-                  <span v-if="!loading">{{ t('auth.createAccountButton') }}</span>
-                  <span v-else>{{ t('auth.creatingAccount') }}</span>
+                  <span v-if="!loading">{{ $t('auth.createAccountButton') }}</span>
+                  <span v-else>{{ $t('auth.creatingAccount') }}</span>
                 </Button>
               </Field>
             </FieldGroup>
           </form>
 
           <div class="mt-4 text-center text-sm">
-            <span class="text-muted-foreground">{{ t('auth.alreadyHaveAccount') }}</span>
+            <span class="text-muted-foreground">{{ $t('auth.alreadyHaveAccount') }}</span>
             <NuxtLink to="/auth/login" class="ml-1 underline-offset-4 hover:underline">
-              {{ t('auth.signIn') }}
+              {{ $t('auth.signIn') }}
             </NuxtLink>
           </div>
         </CardContent>
@@ -90,20 +90,20 @@
 
       <Card v-else>
         <CardHeader>
-          <CardTitle>{{ t('auth.verifyTitle') }}</CardTitle>
-          <CardDescription>{{ t('auth.demoVerificationCode', { email: registeredEmail }) }}</CardDescription>
+          <CardTitle>{{ $t('auth.verifyTitle') }}</CardTitle>
+          <CardDescription>{{ $t('auth.demoVerificationCode', { email: registeredEmail }) }}</CardDescription>
         </CardHeader>
         <CardContent class="space-y-4">
           <Alert>
             <AlertDescription>
-              <strong>{{ t('auth.demoMode') }}:</strong> {{ t('auth.demoCodeIs') }}
+              <strong>{{ $t('auth.demoMode') }}:</strong> {{ $t('auth.demoCodeIs') }}
               <code class="block mt-2 p-2 bg-muted rounded text-lg font-mono">{{ verificationCode }}</code>
             </AlertDescription>
           </Alert>
 
           <div class="text-center">
             <Button @click="goToVerification">
-              {{ t('auth.continueToVerification') }}
+              {{ $t('auth.continueToVerification') }}
             </Button>
           </div>
         </CardContent>

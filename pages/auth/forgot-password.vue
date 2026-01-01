@@ -3,8 +3,8 @@
     <div class="w-full max-w-sm">
       <Card v-if="!emailSent">
         <CardHeader>
-          <CardTitle>{{ t('auth.forgotPasswordTitle') }}</CardTitle>
-          <CardDescription>{{ t('auth.forgotPasswordDescription') }}</CardDescription>
+          <CardTitle>{{ $t('auth.forgotPasswordTitle') }}</CardTitle>
+          <CardDescription>{{ $t('auth.forgotPasswordDescription') }}</CardDescription>
         </CardHeader>
         <CardContent>
           <Alert v-if="apiError" variant="destructive" class="mb-4">
@@ -15,11 +15,11 @@
             <FieldGroup>
               <VeeField name="email" v-slot="{ field, errors }" :validate-on-blur="true">
                 <Field :data-invalid="!!errors.length">
-                  <FieldLabel for="email">{{ t('auth.email') }}</FieldLabel>
+                  <FieldLabel for="email">{{ $t('auth.email') }}</FieldLabel>
                   <Input
                     id="email"
                     type="email"
-                    :placeholder="t('auth.emailPlaceholder')"
+                    :placeholder="$t('auth.emailPlaceholder')"
                     autocomplete="email"
                     v-bind="field"
                     :aria-invalid="!!errors.length"
@@ -30,8 +30,8 @@
 
               <Field>
                 <Button type="submit" class="w-full" :disabled="loading">
-                  <span v-if="!loading">{{ t('auth.sendResetLink') }}</span>
-                  <span v-else>{{ t('auth.sending') }}</span>
+                  <span v-if="!loading">{{ $t('auth.sendResetLink') }}</span>
+                  <span v-else>{{ $t('auth.sending') }}</span>
                 </Button>
               </Field>
             </FieldGroup>
@@ -39,7 +39,7 @@
 
           <div class="mt-4 text-center text-sm">
             <NuxtLink to="/auth/login" class="underline-offset-4 hover:underline">
-              {{ t('auth.backToLogin') }}
+              {{ $t('auth.backToLogin') }}
             </NuxtLink>
           </div>
         </CardContent>
@@ -47,15 +47,15 @@
 
       <Card v-else>
         <CardHeader>
-          <CardTitle>{{ t('auth.checkEmail') }}</CardTitle>
+          <CardTitle>{{ $t('auth.checkEmail') }}</CardTitle>
           <CardDescription>
-            {{ t('auth.checkEmailDescription', { email: submittedEmail }) }}
+            {{ $t('auth.checkEmailDescription', { email: submittedEmail }) }}
           </CardDescription>
         </CardHeader>
         <CardContent class="space-y-4">
           <Alert v-if="resetUrl">
             <AlertDescription>
-              <strong>{{ t('auth.demoMode') }}:</strong> {{ t('auth.demoResetLink') }}
+              <strong>{{ $t('auth.demoMode') }}:</strong> {{ $t('auth.demoResetLink') }}
               <NuxtLink :to="resetUrl" class="block mt-2 text-sm text-primary hover:underline break-all">
                 {{ resetUrl }}
               </NuxtLink>
@@ -64,7 +64,7 @@
 
           <div class="text-center">
             <Button @click="goToLogin">
-              {{ t('auth.backToLogin') }}
+              {{ $t('auth.backToLogin') }}
             </Button>
           </div>
         </CardContent>

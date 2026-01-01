@@ -9,10 +9,11 @@
           >
             <Avatar class="h-8 w-8 rounded-lg">
               <AvatarImage
+                v-if="user.avatar"
                 :src="user.avatar"
                 :alt="user.name"
               />
-              <AvatarFallback class="rounded-lg"> CN </AvatarFallback>
+              <AvatarFallback class="rounded-lg">{{ getInitials(user.name) }}</AvatarFallback>
             </Avatar>
             <div class="grid flex-1 text-left text-sm leading-tight">
               <span class="truncate font-medium">{{ user.name }}</span>
@@ -31,10 +32,11 @@
             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
               <Avatar class="h-8 w-8 rounded-lg">
                 <AvatarImage
+                  v-if="user.avatar"
                   :src="user.avatar"
                   :alt="user.name"
                 />
-                <AvatarFallback class="rounded-lg"> CN </AvatarFallback>
+                <AvatarFallback class="rounded-lg">{{ getInitials(user.name) }}</AvatarFallback>
               </Avatar>
               <div class="grid flex-1 text-left text-sm leading-tight">
                 <span class="truncate font-semibold">{{ user.name }}</span>
@@ -43,31 +45,51 @@
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <Sparkles />
-              Upgrade to Pro
+            <DropdownMenuItem @click="navigateTo('/profile')">
+              <User />
+              {{ $t('nav.profile') }}
+            </DropdownMenuItem>
+            <DropdownMenuItem @click="navigateTo('/settings')">
+              <Settings />
+              {{ $t('nav.settings') }}
             </DropdownMenuItem>
           </DropdownMenuGroup>
+
           <DropdownMenuSeparator />
+
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <BadgeCheck />
-              Account
+            <DropdownMenuItem @click.prevent="toggleTheme">
+              <Moon v-if="colorMode.value === 'dark'" />
+              <Sun v-else />
+              {{ colorMode.value === 'dark' ? $t('nav.lightMode') : $t('nav.darkMode') }}
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <CreditCard />
-              Billing
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Bell />
-              Notifications
-            </DropdownMenuItem>
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>
+                <Languages />
+                {{ $t('nav.language') }}
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem
+                  v-for="locale in locales"
+                  :key="locale.code"
+                  @click="setLocale(locale.code)"
+                  :class="{ 'bg-accent': locale.code === currentLocale }"
+                >
+                  <Check v-if="locale.code === currentLocale" class="h-4 w-4" />
+                  <span :class="{ 'ml-6': locale.code !== currentLocale }">{{ locale.name }}</span>
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
           </DropdownMenuGroup>
+
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+
+          <DropdownMenuItem @click="handleLogout" :disabled="isLoggingOut">
             <LogOut />
-            Log out
+            {{ isLoggingOut ? $t('nav.loggingOut') : $t('nav.logout') }}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -76,15 +98,54 @@
 </template>
 
 <script setup lang="ts">
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from "lucide-vue-next";
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { ChevronsUpDown, LogOut, User, Settings, Moon, Sun, Languages, Check } from 'lucide-vue-next'
 
-const props = defineProps<{
+defineProps<{
   user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-}>();
+    name: string
+    email: string
+    avatar?: string
+  }
+}>()
 
-const { isMobile } = useSidebar();
+const router = useRouter()
+const { isMobile } = useSidebar()
+const { locales, setLocale, locale } = useI18n()
+const colorMode = useColorMode()
+const isLoggingOut = ref(false)
+
+const currentLocale = computed(() => locale.value)
+
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map(part => part.charAt(0).toUpperCase())
+    .slice(0, 2)
+    .join('')
+}
+
+function toggleTheme() {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+async function handleLogout() {
+  if (isLoggingOut.value) return
+
+  isLoggingOut.value = true
+
+  try {
+    await $fetch('/api/auth/logout', {
+      method: 'DELETE',
+    })
+
+    await router.push('/auth/login')
+  } catch (error) {
+    console.error('Logout failed:', error)
+    await router.push('/auth/login')
+  } finally {
+    isLoggingOut.value = false
+  }
+}
 </script>
