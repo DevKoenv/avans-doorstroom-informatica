@@ -30,7 +30,7 @@
 
 <script setup>
 const handleGoogleLogin = () => {
-  const { openInPopup } = useUserSession()
-  openInPopup('/api/auth/google')
-}
+  const { openInPopup } = useUserSession();
+  openInPopup("/api/auth/google");
+};
 </script>

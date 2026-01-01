@@ -6,10 +6,10 @@
       :content="{
         align: 'start',
         side: 'bottom',
-        sideOffset: 8
+        sideOffset: 8,
       }"
       :ui="{
-        content: 'w-48'
+        content: 'w-48',
       }"
       @update:selected="(item) => item?.click?.()"
     >
@@ -43,64 +43,70 @@
 </template>
 
 <script setup lang="ts">
-import type { DropdownMenuItem } from '@nuxt/ui'
+import type { DropdownMenuItem } from "@nuxt/ui";
 const localePath = useLocalePath();
-const toast = useToast()
+const toast = useToast();
 
-const { loggedIn, user, clear } = useUserSession()
+const { loggedIn, user, clear } = useUserSession();
 
-const router = useRouter()
+const router = useRouter();
 
 const handleLogout = async () => {
   try {
-    await $fetch('/api/auth/logout', {
-      method: 'POST'
-    })
+    await $fetch("/api/auth/logout", {
+      method: "POST",
+    });
 
-    await clear()
+    await clear();
 
     toast.add({
-      title: 'Logged out',
-      description: 'You have been logged out successfully.',
-      color: 'success'
-    })
+      title: "Logged out",
+      description: "You have been logged out successfully.",
+      color: "success",
+    });
 
-    await navigateTo(localePath('/auth/login'))
+    await navigateTo(localePath("/auth/login"));
   } catch (error) {
     toast.add({
-      title: 'Error',
-      description: 'An error occurred during logout.',
-      color: 'error'
-    })
+      title: "Error",
+      description: "An error occurred during logout.",
+      color: "error",
+    });
   }
-}
+};
 
 // Initialize auth state
 onMounted(() => {
-  const { fetch } = useUserSession()
-  fetch()
-})
+  const { fetch } = useUserSession();
+  fetch();
+});
 
 const items = ref<DropdownMenuItem[]>([
-  [{
-    label: user.value ? user.value.name : '',
-    avatar: {
-      src: 'https://avatars.githubusercontent.com/u/3501211?v=4'
+  [
+    {
+      label: user.value ? user.value.name : "",
+      avatar: {
+        src: "https://avatars.githubusercontent.com/u/3501211?v=4",
+      },
+      type: "label",
     },
-    type: 'label'
-  }],
-  [{
-    label: "Profile",
-    icon: "i-lucide-user",
-    to: localePath('/admin/profile'),
-  }],
-  [{
-    label: 'Logout',
-    icon: 'i-lucide-log-out',
-    onSelect: async () => {
-      handleLogout();
-      await navigateTo({ path: localePath('/admin/profile') });
+  ],
+  [
+    {
+      label: "Profile",
+      icon: "i-lucide-user",
+      to: localePath("/admin/profile"),
     },
-  }],
-])
+  ],
+  [
+    {
+      label: "Logout",
+      icon: "i-lucide-log-out",
+      onSelect: async () => {
+        handleLogout();
+        await navigateTo({ path: localePath("/admin/profile") });
+      },
+    },
+  ],
+]);
 </script>

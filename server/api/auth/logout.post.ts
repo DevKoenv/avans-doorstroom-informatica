@@ -1,8 +1,8 @@
 export default defineEventHandler(async (event) => {
-  await clearUserSession(event)
-  
+  await clearUserSession(event);
+
   return {
     success: true,
-    message: 'Logged out successfully'
-  }
-})
+    message: "Logged out successfully",
+  };
+});

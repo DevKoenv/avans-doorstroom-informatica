@@ -1,24 +1,19 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
-  modules: [
-    "@nuxt/ui",
-    "@nuxtjs/i18n",
-    "nuxt-nodemailer",
-    'nuxt-auth-utils',
-  ],
+  modules: ["@nuxt/ui", "@nuxtjs/i18n", "nuxt-nodemailer", "nuxt-auth-utils"],
   i18n: {
-    baseUrl: process.env.NUXT_BASE_URL || 'http://localhost:3000',
+    baseUrl: process.env.NUXT_BASE_URL || "http://localhost:3000",
     defaultLocale: "en",
     locales: [
-      { code: "en", language: 'en-US', name: "English", file: "en.json" },
-      { code: "ru", language: 'ru-RU', name: "Русский", file: "ru.json" },
+      { code: "en", language: "en-US", name: "English", file: "en.json" },
+      { code: "ru", language: "ru-RU", name: "Русский", file: "ru.json" },
     ],
   },
   runtimeConfig: {
     public: {
-      appUrl: process.env.NUXT_BASE_URL || 'http://localhost:3000'
-    }
+      appUrl: process.env.NUXT_BASE_URL || "http://localhost:3000",
+    },
   },
   nodemailer: {
     from: process.env.EMAIL_SMTP_FROM,

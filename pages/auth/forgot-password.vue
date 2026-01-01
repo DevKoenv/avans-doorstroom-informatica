@@ -11,7 +11,7 @@
     </template>
     <template #footer>
       <div class="mt-10 text-sm text-center flex items-center gap-2 justify-center">
-        {{ $t('auth.memberAlready') }}
+        {{ $t("auth.memberAlready") }}
         {{ " " }}
         <NuxtLink
           :to="$localePath('/auth/login')"

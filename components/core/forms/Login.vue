@@ -53,66 +53,69 @@
 </template>
 
 <script setup lang="ts">
-import type { FormError, FormSubmitEvent } from '@nuxt/ui'
+import type { FormError, FormSubmitEvent } from "@nuxt/ui";
 const { t } = useI18n();
-const { loggedIn, fetch: refreshSession } = useUserSession()
+const { loggedIn, fetch: refreshSession } = useUserSession();
 const localePath = useLocalePath();
-const route = useRoute()
+const route = useRoute();
 const toast = useToast();
-const loading = ref(false)
+const loading = ref(false);
 
 // Redirect if already logged in
 watchEffect(async () => {
   if (loggedIn.value) {
-    await navigateTo(localePath('/admin/profile'))
+    await navigateTo(localePath("/admin/profile"));
   }
-})
+});
 
 const form = reactive({
-  email: '',
-  password: '',
+  email: "",
+  password: "",
 });
 
 const validate = (form: any): FormError[] => {
   const errors = [];
-  if (!form.email) errors.push({ name: "email", message: t('auth.emailRequired') });
-  if (!form.password) errors.push({ name: "password", message: t('auth.passwordRequired') });
+  if (!form.email) errors.push({ name: "email", message: t("auth.emailRequired") });
+  if (!form.password) errors.push({ name: "password", message: t("auth.passwordRequired") });
   return errors;
 };
 
 async function onSubmit(event: FormSubmitEvent<any>) {
-  loading.value = true
+  loading.value = true;
 
   try {
-    const response = await $fetch('/api/auth/login', {
-      method: 'POST',
-      body: event.data
-    })
+    const response = await $fetch("/api/auth/login", {
+      method: "POST",
+      body: event.data,
+    });
 
-    await refreshSession()
+    await refreshSession();
 
     toast.add({
-      title: t('auth.success'),
-      description: t('auth.loggedSuccess'),
-      color: 'success',
-    })
+      title: t("auth.success"),
+      description: t("auth.loggedSuccess"),
+      color: "success",
+    });
 
-    await navigateTo(localePath('/admin/profile'))
-
+    await navigateTo(localePath("/admin/profile"));
   } catch (error: unknown) {
     const errorMessage =
-      error && typeof error === 'object' && 'data' in error && typeof error.data === 'object' && error.data && 'message' in error.data
+      error &&
+      typeof error === "object" &&
+      "data" in error &&
+      typeof error.data === "object" &&
+      error.data &&
+      "message" in error.data
         ? (error.data as any).message
-        : t('auth.loginError')
+        : t("auth.loginError");
 
     toast.add({
-      title: t('auth.error'),
+      title: t("auth.error"),
       description: errorMessage,
-      color: 'error'
-    })
+      color: "error",
+    });
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-
 }
 </script>

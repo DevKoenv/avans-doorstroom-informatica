@@ -24,7 +24,6 @@
         />
 
         <div class="max-w-5xl px-4 pb-6 mx-auto sm:px-6 lg:px-8">
-
           <div class="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
             <div class="flex">
               <div class="flex">
@@ -35,7 +34,9 @@
                 />
               </div>
             </div>
-            <div class="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-start sm:space-x-6 sm:pb-1">
+            <div
+              class="mt-6 sm:flex sm:min-w-0 sm:flex-1 sm:items-center sm:justify-start sm:space-x-6 sm:pb-1"
+            >
               <div
                 v-if="user"
                 class="flex-1 min-w-0 mt-6 sm:hidden md:block rtl:mr-6"
@@ -50,7 +51,9 @@
                 ></div>
               </div>
 
-              <div class="flex flex-col gap-4 mt-6 space-y-3 justify-stretch sm:flex-row sm:space-y-0">
+              <div
+                class="flex flex-col gap-4 mt-6 space-y-3 justify-stretch sm:flex-row sm:space-y-0"
+              >
                 <UButton
                   icon="i-heroicons-information-circle"
                   color="neutral"
@@ -73,16 +76,16 @@
 </template>
 
 <script setup>
-const { loggedIn, user } = useUserSession()
+const { loggedIn, user } = useUserSession();
 const localePath = useLocalePath();
-const toast = useToast()
+const toast = useToast();
 
 // Redirect if not logged in
 watchEffect(async () => {
   if (!loggedIn.value) {
-    await navigateTo(localePath('/auth/login'))
+    await navigateTo(localePath("/auth/login"));
   }
-})
+});
 
 const { data: bingImage } = await useFetch("https://bing.biturl.top/");
 </script>

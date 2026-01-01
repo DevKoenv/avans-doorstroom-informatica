@@ -64,14 +64,14 @@
 </template>
 
 <script setup>
-const open = ref(false)
-const route = useRoute()
-const { locales } = useI18n()
-const localeCodes = computed(() => locales.value.map(l => l.code))
+const open = ref(false);
+const route = useRoute();
+const { locales } = useI18n();
+const localeCodes = computed(() => locales.value.map((l) => l.code));
 
 const isAuthRoute = computed(() => {
-  const path = route.path
-  if (path.startsWith('/auth')) return true
-  return localeCodes.value.some(locale => path.startsWith(`/${locale}/auth`))
-})
+  const path = route.path;
+  if (path.startsWith("/auth")) return true;
+  return localeCodes.value.some((locale) => path.startsWith(`/${locale}/auth`));
+});
 </script>
