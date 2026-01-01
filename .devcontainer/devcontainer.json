@@ -9,16 +9,12 @@
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {},
-    "ghcr.io/devcontainers/features/node:1": {},
-    "ghcr.io/devcontainers-community/npm-features/typescript:1": {},
-    "ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {},
-    "ghcr.io/devcontainers-extra/features/prisma:2": {},
-    "ghcr.io/devcontainers-community/npm-features/prettier:1": {}
+    "ghcr.io/devcontainers/features/node:1": {}
   },
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // This can be used to network with other containers or with the host.
-  "forwardPorts": [8080] // 5432 if PostgreSQL port is needed locally
+  "forwardPorts": [3000] // 5432 if PostgreSQL port is needed locally
 
   // Use 'postCreateCommand' to run commands after the container is created.
   // "postCreateCommand": "bun install",
