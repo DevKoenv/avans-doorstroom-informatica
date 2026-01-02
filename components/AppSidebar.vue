@@ -1,11 +1,22 @@
 <template>
   <Sidebar v-bind="props">
     <SidebarHeader>
-      <TeamSwitcher :teams="data.teams" />
+      <TeamSwitcher :teams="teams" :current-team-id="currentTeamId" />
     </SidebarHeader>
     <SidebarContent>
-      <NavMain :items="data.navMain" />
-      <NavProjects :projects="data.projects" />
+      <SidebarGroup>
+        <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem v-for="item in navMain" :key="item.title">
+            <SidebarMenuButton :is-active="item.isActive" as-child>
+              <NuxtLink :to="item.url">
+                <component :is="item.icon" v-if="item.icon" />
+                <span>{{ item.title }}</span>
+              </NuxtLink>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
     </SidebarContent>
     <SidebarFooter>
       <NavUser />
@@ -15,153 +26,81 @@
 </template>
 
 <script setup lang="ts">
-import type { SidebarProps } from "@/utils/variants/sidebar"
+import type { SidebarProps } from '@/utils/variants/sidebar';
 
 import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
+  Users,
+  Folder,
+  Tag,
   Settings2,
-  SquareTerminal,
-} from "lucide-vue-next"
-import NavMain from "@/components/NavMain.vue"
-import NavProjects from "@/components/NavProjects.vue"
-import NavUser from "@/components/NavUser.vue"
-import TeamSwitcher from "@/components/TeamSwitcher.vue"
+  Bookmark,
+} from 'lucide-vue-next';
+import NavUser from '@/components/NavUser.vue';
+import TeamSwitcher from '@/components/TeamSwitcher.vue';
 
 const { user } = useUserSession();
+const route = useRoute();
 
 const props = withDefaults(defineProps<SidebarProps>(), {
-  collapsible: "icon",
-})
+  collapsible: 'icon',
+});
 
-// This is sample data.
-const data = {
-  teams: [
+// Fetch user's teams
+const { data: teamsData } = await useFetch('/api/teams');
+const teams = computed(() => {
+  const rawTeams = teamsData.value?.teams || [];
+  return rawTeams.map((team: any) => ({
+    name: team.name,
+    logo: Users,
+    plan: team.role,
+    id: team.id,
+  }));
+});
+
+// Get current team ID from route
+const currentTeamId = computed(() => {
+  const teamId = route.params.teamId;
+  return teamId ? parseInt(teamId as string) : null;
+});
+
+// Navigation items based on current team
+const navMain = computed(() => {
+  if (!currentTeamId.value) {
+    return [
+      {
+        title: 'Teams',
+        url: '/app/teams',
+        icon: Users,
+        isActive: true,
+      },
+    ];
+  }
+
+  return [
     {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      title: 'Collections',
+      url: `/app/teams/${currentTeamId.value}`,
+      icon: Folder,
+      isActive: route.path.includes('/collections') || route.path === `/app/teams/${currentTeamId.value}`,
     },
     {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
+      title: 'Tags',
+      url: `/app/teams/${currentTeamId.value}/tags`,
+      icon: Tag,
+      isActive: route.path.includes('/tags'),
     },
     {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  navMain: [
-    {
-      title: "Playground",
-      url: "#",
-      icon: SquareTerminal,
-      isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
+      title: 'Members',
+      url: `/app/teams/${currentTeamId.value}/members`,
+      icon: Users,
+      isActive: route.path.includes('/members'),
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
-      url: "#",
+      title: 'Settings',
+      url: `/app/teams/${currentTeamId.value}/settings`,
       icon: Settings2,
-      items: [
-        {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
-          url: "#",
-        },
-      ],
+      isActive: route.path.includes('/settings'),
     },
-  ],
-  projects: [
-    {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
-    },
-    {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
-    },
-  ],
-}
+  ];
+});
 </script>

@@ -48,14 +48,18 @@ model VerificationToken {
 // Team-based Bookmark Manager Models
 
 model Team {
-  id          Int          @id @default(autoincrement())
+  id          Int            @id @default(autoincrement())
   name        String
   description String?
-  slug        String       @unique
+  avatar      String?
+  slug        String         @unique
   members     TeamMember[]
   collections Collection[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  tags        Tag[]
+  invitations Invitation[]
+  settings    TeamSettings?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
   @@index([slug])
 }
@@ -87,6 +91,7 @@ model Collection {
   description String?
   icon        String?    @default("folder")
   color       String?    @default("#6366f1")
+  sortOrder   Int        @default(0)
   team        Team       @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId      Int
   bookmarks   Bookmark[]
@@ -94,6 +99,7 @@ model Collection {
   updatedAt   DateTime   @updatedAt
 
   @@index([teamId])
+  @@index([teamId, sortOrder])
 }
 
 model Bookmark {
@@ -120,12 +126,16 @@ enum BookmarkStatus {
 
 model Tag {
   id        Int           @id @default(autoincrement())
-  name      String        @unique
+  name      String
   color     String?       @default("#6366f1")
+  team      Team          @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId    Int
   bookmarks BookmarkTag[]
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 
+  @@unique([teamId, name])
+  @@index([teamId])
   @@index([name])
 }
 
@@ -139,4 +149,32 @@ model BookmarkTag {
   @@id([bookmarkId, tagId])
   @@index([bookmarkId])
   @@index([tagId])
+}
+
+model TeamSettings {
+  id                        Int      @id @default(autoincrement())
+  team                      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId                    Int      @unique
+  defaultMemberRole         TeamMemberRole @default(MEMBER)
+  allowMemberBookmarkCreate Boolean  @default(true)
+  allowMemberTagCreate      Boolean  @default(true)
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+}
+
+model Invitation {
+  id        Int      @id @default(autoincrement())
+  email     String
+  role      TeamMemberRole @default(MEMBER)
+  token     String   @unique
+  expires   DateTime
+  accepted  Boolean  @default(false)
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([teamId])
+  @@index([token])
+  @@index([email])
 }

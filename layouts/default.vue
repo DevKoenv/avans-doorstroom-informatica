@@ -60,9 +60,9 @@ const breadcrumbs = computed(() => {
   const segments = route.path.split("/").filter(Boolean);
   const crumbs = [];
 
-  // Add root breadcrumb if defined
+  // Add root breadcrumb if defined and not null
   const rootRoute = router.resolve("/");
-  if (rootRoute.meta?.breadcrumb) {
+  if (rootRoute.meta?.breadcrumb !== undefined && rootRoute.meta?.breadcrumb !== null) {
     const breadcrumb = rootRoute.meta.breadcrumb;
     crumbs.push({
       label: typeof breadcrumb === "string" ? breadcrumb : breadcrumb.label,
@@ -77,8 +77,9 @@ const breadcrumbs = computed(() => {
   segments.forEach((segment) => {
     currentPath += `/${segment}`;
     const resolvedRoute = router.resolve(currentPath);
+    const breadcrumbMeta = resolvedRoute.meta?.breadcrumb;
 
-    if (resolvedRoute.meta?.breadcrumb) {
+    if (breadcrumbMeta !== undefined && breadcrumbMeta !== null) {
       // Add "..." placeholder if we skipped previous segments
       if (hasSkipped) {
         crumbs.push({
@@ -88,14 +89,15 @@ const breadcrumbs = computed(() => {
         hasSkipped = false;
       }
 
-      const breadcrumb = resolvedRoute.meta.breadcrumb;
+      const breadcrumb = breadcrumbMeta;
       crumbs.push({
         label: typeof breadcrumb === "string" ? breadcrumb : breadcrumb.label,
         path: currentPath,
       });
-    } else {
+    } else if (breadcrumbMeta === undefined) {
+      // missing breadcrumb -> count as skipped (will produce "..." later)
       hasSkipped = true;
-    }
+    } // if breadcrumbMeta === null -> explicitly hidden: do nothing and do NOT set hasSkipped
   });
 
   return crumbs;

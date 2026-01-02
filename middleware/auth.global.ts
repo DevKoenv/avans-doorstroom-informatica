@@ -4,8 +4,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // Public routes that don't require authentication
   const publicRoutes = ["/", "/auth/login", "/auth/register", "/auth/verify-email", "/auth/forgot-password", "/auth/reset-password"];
 
+  // Allow invitation pages if logged in
+  const isInvitationPage = to.path.startsWith("/invitations/");
+
   // Check if route requires authentication
-  const requiresAuth = !publicRoutes.includes(to.path);
+  const requiresAuth = !publicRoutes.includes(to.path) && !isInvitationPage;
 
   // If route requires auth and user is not authenticated, redirect to login
   if (requiresAuth && !loggedIn.value) {
