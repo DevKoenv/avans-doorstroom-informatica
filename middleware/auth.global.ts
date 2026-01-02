@@ -4,11 +4,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // Public routes that don't require authentication
   const publicRoutes = ["/", "/auth/login", "/auth/register", "/auth/verify-email", "/auth/forgot-password", "/auth/reset-password"];
 
-  // Allow invitation pages if logged in
-  const isInvitationPage = to.path.startsWith("/invitations/");
-
   // Check if route requires authentication
-  const requiresAuth = !publicRoutes.includes(to.path) && !isInvitationPage;
+  const requiresAuth = !publicRoutes.includes(to.path);
 
   // If route requires auth and user is not authenticated, redirect to login
   if (requiresAuth && !loggedIn.value) {
@@ -16,7 +13,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   }
 
   // If user is authenticated and trying to access login/register, redirect to profile
-  if (loggedIn.value && (to.path === "/auth/login" || to.path === "/auth/register")) {
+  if (loggedIn.value && !requiresAuth) {
     return navigateTo("/app");
   }
 });

@@ -20,6 +20,7 @@
                 <BreadcrumbItem :class="{ 'hidden md:block': index === 0 }">
                   <BreadcrumbLink
                     v-if="crumb.path && index < breadcrumbs.length - 1"
+                    :as="NuxtLink"
                     :href="crumb.path"
                   >
                     {{ crumb.label }}
@@ -53,6 +54,8 @@
 <script setup lang="ts">
 import AppSidebar from "@/components/AppSidebar.vue";
 
+const NuxtLink = resolveComponent("NuxtLink");
+
 const route = useRoute();
 const router = useRouter();
 
@@ -65,7 +68,7 @@ const breadcrumbs = computed(() => {
   if (rootRoute.meta?.breadcrumb !== undefined && rootRoute.meta?.breadcrumb !== null) {
     const breadcrumb = rootRoute.meta.breadcrumb;
     crumbs.push({
-      label: typeof breadcrumb === "string" ? breadcrumb : breadcrumb.label,
+      label: breadcrumb,
       path: "/",
     });
   }
@@ -91,7 +94,7 @@ const breadcrumbs = computed(() => {
 
       const breadcrumb = breadcrumbMeta;
       crumbs.push({
-        label: typeof breadcrumb === "string" ? breadcrumb : breadcrumb.label,
+        label: breadcrumb,
         path: currentPath,
       });
     } else if (breadcrumbMeta === undefined) {
